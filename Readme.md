@@ -1,0 +1,5 @@
+# Random Skier
+
+This project was motivated by a simple frustration. I love skiing (we both do), and my dream is to carve bigg clean turns, hip on the snow, down a wide-open slope enjoying the beautiful view. But, everytime I try to compare my skiing with a top skier I have to go back and forth between videos, look for the exact frame, and repeat this so many times to analyse what's looking good and what's not. Also, it is often the case that the camera angle and distance isn't exactly the same (mine might be taken from down the slope but the other might be taken from across the slope), making an analysis so much more tiring than it should be.
+
+Random skier is a website that fixes this. The user uploads a short video of them making a (carved) turn, and the website reconstructs their movement as a 3D model, then places it sidy-by-side with a top skier, with lots of additional features so that we can analyse through an interactive 3D experience.
