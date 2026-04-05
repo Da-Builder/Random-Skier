@@ -13,8 +13,3 @@ Our reconstruction pipeline is built on SAM-Body4D, which is a training-free fra
 ## Browser-Side Rendering
 
 We're going to use Three.js
-
-# Acknowledgements
-
-This project builds on the work of Gao et al. (2025) and the broader ecosystem of SAM‑based models, diffusion methods, and human mesh reconstruction research. Their contributions make this project possible.
-
