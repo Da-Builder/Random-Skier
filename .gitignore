@@ -1,7 +1,11 @@
+# Node
+node_modules/
+
+
+# Notebook
+.ipynb_checkpoints/
+
+
 # Terraform
 *.tfstate*
 .terraform/
-
-
-# Python Notebook
-.ipynb_checkpoints/
