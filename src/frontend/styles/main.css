@@ -1,0 +1,127 @@
+html,
+body,
+div,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+ul,
+li,
+canvas,
+footer,
+header,
+section
+{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: sans-serif;
+    color: #52322B;
+    user-select: none;
+}
+
+header {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .header-container {
+        width: 80vw; /* Relative to window width, not parent element */
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    
+        .header-brand {
+            font-weight: 250;
+            font-size: 1.5625rem;
+            line-height: 100%;
+        }
+    
+        .header-menu {
+            list-style: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2em;
+    
+            li {
+                padding: 10px 30px;
+                cursor: pointer;
+                transition: all 0.4s ease-in-out;
+    
+                &:hover {
+                    color: #336EBB;
+                    svg {
+                        path {
+                            stroke: #336EBB;
+                            fill: #336EBB;
+                        }
+                    }
+                }
+            }
+    
+            a {
+                font-size: 0.8125rem;
+                text-decoration: none;
+                transition: all 0.4s ease-in-out;
+            }
+        }
+    }
+}
+
+
+#hero-container {
+    width: 100%;
+    height: 100lvh;
+    position: relative;
+    background-color: blue;
+
+    #hero-canvas {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        pointer-events: none;
+    }
+}
+
+#ski-container {
+    width: 100%;
+    height: 100lvh;
+    position: relative;
+    background-color: red;
+
+    #ski-canvas {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        pointer-events: none;
+    }
+}
+
+
+
+* {
+  outline: 1px solid red !important;
+}
+
+#ski {
+    width: 80%;
+    height: 80%;
+    display: block;
+    margin: 0 auto;
+}
