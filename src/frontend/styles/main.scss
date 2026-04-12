@@ -1,0 +1,259 @@
+/* Testing */
+* {
+  // outline: 1px solid red !important;
+}
+
+
+html,
+body,
+div,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+ul,
+li,
+canvas,
+footer,
+header,
+section
+{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: sans-serif;
+    color: #52322B;
+    user-select: none;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.loader {
+    display: flex;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: #BED7E6;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2em;
+    font-size: 12px;
+    
+    .progress {
+        position: absolute;
+        top: 60%;
+        width: 50%;
+        height: 1px;
+        background: #52322B;
+        transform: scaleX(0);
+        transition: transform 1s;
+        transform-origin: left;
+        z-index: 10;
+        margin: 0 5%;
+    }
+}
+header {
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .header-container {
+        width: 80vw; /* Relative to window width, not parent element */
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    
+        .header-brand {
+            font-weight: 250;
+            font-size: 1.5625rem;
+            line-height: 100%;
+        }
+    
+        .header-menu {
+            list-style: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2em;
+    
+            li {
+                padding: 10px 30px;
+                cursor: pointer;
+                transition: all 0.4s ease-in-out;
+    
+                &:hover {
+                    color: #336EBB;
+                    svg {
+                        path {
+                            stroke: #336EBB;
+                            fill: #336EBB;
+                        }
+                    }
+                }
+            }
+    
+            a {
+                font-size: 0.8125rem;
+                text-decoration: none;
+                transition: all 0.4s ease-in-out;
+            }
+        }
+    }
+}
+
+// .section {
+//     position: relative;
+//     z-index: 1;
+//     display: flex;
+//     width: 100%;
+//     height: 100lvh;
+//     align-content: center;
+//     justify-content: center;
+//     margin: 0;
+//     padding: 
+//     scroll-snap-align: start;
+//     -moz-user-select: none;
+//     -webkit-user-select: none;
+//     -ms-user-select: none;
+//     user-select: none;
+//     width: 100vw;
+//     overflow: hidden;
+// }
+
+
+#hero-container {
+    width: 100%;
+    height: 100lvh;
+    position: relative;
+    background: radial-gradient(circle, #BED7E6 30%, #a9caf5 100%);
+
+    #hero-canvas {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        pointer-events: none;
+    }
+
+    .intro-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        position: fixed;
+        width: 50%;
+        height: 100%;
+        top: 0;
+        right: 0;
+        opacity: 0;
+        z-index: 10;
+        
+        .intro-content {
+            width: 100%;
+            margin-right: 30%;
+            h1 {
+                font-family: serif;
+                font-weight: 400;
+                font-size: 6.25rem;
+                line-height: 100%;
+                letter-spacing: -0.04em;
+                text-align: right;
+                margin-bottom: 40px;
+            }
+            p {
+                font-weight: 200;
+                font-size: 0.813rem;
+                text-align: right;
+                margin-bottom: 30px;
+            }
+        }
+    }
+    
+    .instruction-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        position: fixed;
+        width: 50%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        z-index: 10;
+        
+        .instruction-content {
+            width: 100%;
+            margin-left: 30%;
+            h1 {
+                font-family: serif;
+                font-weight: 400;
+                font-size: 6.25rem;
+                line-height: 100%;
+                letter-spacing: -0.04em;
+                text-align: left;
+                margin-bottom: 40px;
+            }
+            p {
+                font-weight: 200;
+                font-size: 0.813rem;
+                text-align: left;
+                margin-bottom: 30px;
+            }
+        }
+    }
+}
+
+
+.view-1 {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.view-2 {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#ski-container {
+    width: 100%;
+    height: 100lvh;
+    position: relative;
+    background-color: #E6BFBE;
+
+    #ski-canvas {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        pointer-events: none;
+    }
+}
+
+
+
+
+
+#ski {
+    width: 80%;
+    height: 80%;
+    display: block;
+    margin: 0 auto;
+}

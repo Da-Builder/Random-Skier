@@ -3,35 +3,23 @@ import { createControls } from './controls.js';
 import { createScene } from './scene.js';
 import { createRenderer } from './renderer.js';
 import { resizeRendererToDisplaySize } from './resize.js';
-
+import { heroAnimation } from './hero.js'
 
 function main() {
 
-	const canvas = document.querySelector( '#ski' );
+    window.history.scrollRestoration = "manual";
 
-    const renderer = createRenderer(canvas);
-    const camera = createCamera();
-    const controls = createControls(camera, canvas);
-    const scene = createScene();
+    window.addEventListener("beforeunload", () => {
+        window.scrollTo(0, 0);
+    });
+    
+    window.addEventListener("load", () => {
+        window.scrollTo(0, 0);
+    });
 
-	function render() {
-        
-        // If the size of the canvas changes
-		if ( resizeRendererToDisplaySize( renderer ) ) {
 
-			const canvas = renderer.domElement;
-			camera.aspect = canvas.clientWidth / canvas.clientHeight;
-			camera.updateProjectionMatrix();
-
-		}
-
-		renderer.render( scene, camera );
-
-		requestAnimationFrame( render );
-
-	}
-
-	requestAnimationFrame( render );
+    heroAnimation() 
+    
 
 }
 

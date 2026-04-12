@@ -8,7 +8,9 @@ export function createCamera() {
     const far = 200;
     
     const camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
-    camera.position.set( 0, 10, 20 );
+    camera.position.set( 0, 10, 30 );
+    camera.lookAt(0, 0, 0);
+
 
     return camera;
     
