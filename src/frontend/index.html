@@ -1,13 +1,16 @@
-<!--prettier-ignore-->
 <!DOCTYPE html>
 
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <title>Random Skier</title>
-        <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="styles/main.scss">
     </head>
     <body>
+        <div class="loader">
+            <p>Loading... Please wait</p>
+            <div class="progress"></div>
+        </div>
         <header>
             <div class="header-container">
                 <h1 class="header-brand">
@@ -29,10 +32,24 @@
         
 
         <section id="hero-container">
-            <canvas id="hero-canvas">
-                
-            </canvas>
+            <canvas id="hero-canvas"></canvas>
+            <div class="intro-container">
+    			<div class="intro-content">
+    				<h1>Analyse your<br>Skiing</h1>
+    				<p>Compare your skiing with great skiers through an interactive 3D experience</p>
+    			</div>
+    		</div>
+            <div class="instruction-container">
+    			<div class="instruction-content">
+    				<h1>Upload a video</h1>
+    				<p>Your video will be processed through a state-of-art human mesh reconstruction algorithm</p>
+    			</div>
+    		</div>
         </section>
+
+        <section class="view-1"></section>
+        
+        <section class="view-2"></section>
 
         
 
@@ -42,6 +59,6 @@
             </canvas>
         </section>
 
-        <!-- <script type="module" src="js/main.js"></script> -->
+        <script type="module" src="js/main.js"></script>
     </body>
 </html>

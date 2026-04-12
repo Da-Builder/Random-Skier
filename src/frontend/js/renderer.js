@@ -2,10 +2,15 @@ import * as THREE from 'three';
 
 export function createRenderer(canvas) {
     
-    return new THREE.WebGLRenderer( { 
+    const renderer = new THREE.WebGLRenderer( { 
+        canvas, // Use an existing canvas
         antialias: true, // Smoothen edges
-        canvas // Use an existing canvas
+        alpha: true
     } );
+
+    renderer.setClearAlpha(0);
+
+    return renderer
     
 }
 
