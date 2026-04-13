@@ -3,7 +3,7 @@ import { createControls } from './controls.js';
 import { createScene } from './scene.js';
 import { createRenderer } from './renderer.js';
 import { resizeRendererToDisplaySize } from './resize.js';
-import { heroAnimation } from './hero.js'
+import { setupHero } from './hero.js'
 
 function main() {
 
@@ -18,7 +18,7 @@ function main() {
     });
 
 
-    heroAnimation() 
+    setupHero() 
     
 
 }

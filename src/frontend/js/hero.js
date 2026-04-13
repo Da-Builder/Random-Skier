@@ -8,7 +8,7 @@ import "../styles/main.scss"
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function heroAnimation() {
+export function setupHero() {
 
     const canvas = document.getElementById('hero-canvas');
 
@@ -21,8 +21,12 @@ export function heroAnimation() {
 
     function introAnimation(){
 
+        // document.body.style.overflow = "hidden";
+
         const introTL = gsap.timeline({
             onComplete: () => {
+                document.body.style.overflowY = "auto";
+                document.body.style.overflowX = "hidden";
                 scrollAnimation();
             }
         });
@@ -58,9 +62,8 @@ export function heroAnimation() {
 
         const scrollTL = gsap.timeline({
         	scrollTrigger: {
-        		trigger: '#hero-container',
+        		trigger: '.hero-container',
         		pin: true, // pin the trigger element while active
-                pinSpacing: false,
         		start: 'top top',
         		end: '200% top',
         		scrub: 1,
@@ -73,7 +76,7 @@ export function heroAnimation() {
             '.header-container', 
             {opacity: 1, y: '0%'}, 
             {opacity: 0, y: '-100%', ease: "power1.Out", duration: 0.6}, 
-            0
+            0 // Timestamp is converted to scrol percentage
         )
         .fromTo(
             '.intro-container', 
@@ -85,13 +88,13 @@ export function heroAnimation() {
             position, 
             {x: -6, y: 2, z: 10}, 
             {x: 6, y: 4, z: 12, ease: "power4.out", onUpdate: render, duration: 1},
-            0.5
+            "-=0.5"
         )
         .fromTo(
             '.instruction-container', 
             {opacity: 0, xPercent: -100}, 
             {opacity: 1, xPercent: 0, ease: "power4.out", duration: 1}, 
-            0.8
+            "-=0.8"
         )
         
     }
