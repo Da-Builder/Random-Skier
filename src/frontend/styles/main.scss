@@ -1,4 +1,9 @@
-@use "variables";
+// @use "variables";
+
+$colour: #52322B;
+$font-heading: serif;
+$font-text: sans-serif;
+
 
 * {
     margin: 0;
@@ -6,7 +11,7 @@
     border: 0;
     font-size: 100%;
     vertical-align: baseline;
-    outline: 1px solid red !important; // Debugging
+    // outline: 1px solid red !important; // Debugging
 }
 
 
