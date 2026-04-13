@@ -9,3 +9,12 @@ What I have to do
 4. After the above reaches the end, the user can scrol down to the next section
 
 5. This is the analysis part
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: sans-serif;
+    color: #52322B;
+    user-select: none;
+}
+Removing html breaks
