@@ -1,3 +1,5 @@
+@use "variables";
+
 * {
     margin: 0;
     padding: 0;
@@ -11,8 +13,8 @@
 html, body {
     width: 100%;
     height: 100%;
-    font-family: sans-serif;
-    color: #52322B;
+    font-family: $font-text;
+    color: $colour;
     user-select: none;
 }
 
