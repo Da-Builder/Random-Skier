@@ -49,3 +49,25 @@ resource "aws_s3_bucket_lifecycle_configuration" "data" {
     expiration { days = 1 }
   }
 }
+
+
+resource "aws_lambda_function" "lambda" {
+  function_name = "${var.project}-lambda"
+  role          = aws_iam_role.lambda.arn
+}
+
+resource "aws_lambda_function_url" "lambda" {
+  function_name      = aws_lambda_function.lambda.function_name
+  authorization_type = "AWS_IAM"
+}
+
+resource "aws_iam_role" "lambda" {
+  name = "${var.project}-lambda"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = {
+      Effect    = "Allow"
+      Action    = "sts:AssumeRole"
+      Principal = { Service = "lambda.amazonaws.com" }
+  } })
+}
