@@ -33,3 +33,19 @@ resource "aws_s3_object" "website" {
   key    = "index.html"
   source = "../src/frontend/index.html"
 }
+
+
+resource "aws_s3_bucket" "data" {
+  bucket        = "${var.project}-data"
+  force_destroy = true
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "data" {
+  bucket = aws_s3_bucket.data.id
+
+  rule {
+    id     = "Auto Delete"
+    status = "Enabled"
+    expiration { days = 1 }
+  }
+}
