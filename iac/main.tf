@@ -20,3 +20,16 @@ variable "project" {
     error_message = "Invalid Project Name: Must be lowercase"
   }
 }
+
+
+resource "aws_s3_bucket" "website" {
+  bucket        = "${var.project}-website"
+  force_destroy = true
+}
+
+resource "aws_s3_object" "website" {
+  bucket = aws_s3_bucket.website.id
+
+  key    = "index.html"
+  source = "../src/frontend/index.html"
+}
