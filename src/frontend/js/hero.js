@@ -4,7 +4,7 @@ import { createRenderer } from './renderer.js';
 import { resizeRendererToDisplaySize } from './resize.js';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import "../styles/main.scss"
+import "../styles/main.css"
 
 gsap.registerPlugin(ScrollTrigger);
 
