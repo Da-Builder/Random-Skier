@@ -1,9 +1,8 @@
-// @use "variables";
-
-$colour: #52322B;
-$font-heading: serif;
-$font-text: sans-serif;
-
+:root {
+    --colour: #52322B;
+    --font-heading: serif;
+    --font-text: sans-serif; 
+}
 
 * {
     margin: 0;
@@ -11,15 +10,15 @@ $font-text: sans-serif;
     border: 0;
     font-size: 100%;
     vertical-align: baseline;
-    // outline: 1px solid red !important; // Debugging
+    outline: 1px solid red !important;  /* Debugging */
 }
 
 
 html, body {
     width: 100%;
     height: 100%;
-    font-family: $font-text;
-    color: $colour;
+    font-family: var(--font-text);
+    color: var(--colour);
     user-select: none;
 }
 
@@ -33,7 +32,7 @@ section {
 
 
 
-// Loading screen
+/* Loading screen */
 
 .loader {
     width: 100%;
@@ -47,24 +46,24 @@ section {
     flex-direction: column;
     gap: 2em;
     font-size: 12px;
-    
-    // .progress {
-    //     position: absolute;
-    //     top: 60%;
-    //     width: 50%;
-    //     height: 1px;
-    //     background: #52322B;
-    //     transform: scaleX(0);
-    //     transition: transform 1s;
-    //     transform-origin: left;
-    //     z-index: 10;
-    //     margin: 0 5%;
-    // }
+   
+    /* .progress {
+        position: absolute;
+        top: 60%;
+        width: 50%;
+        height: 1px;
+        background: var(--colour);
+        transform: scaleX(0);
+        transition: transform 1s;
+        transform-origin: left;
+        z-index: 10;
+        margin: 0 5%;
+    } */
 }
 
 
 
-// Header
+/* Header */
 
 header {
     width: 100%;
@@ -119,7 +118,7 @@ header {
 
 
 
-// Hero
+/* Hero */
 
 .hero-container {
     background: radial-gradient(circle, #BED7E6 30%, #a9caf5 100%);
@@ -147,7 +146,7 @@ header {
             width: 100%;
             margin-right: 30%;
             h1 {
-                font-family: serif;
+                font-family: var(--font-heading);
                 font-weight: 400;
                 font-size: 6.25rem;
                 line-height: 100%;
@@ -180,7 +179,7 @@ header {
             width: 100%;
             margin-left: 30%;
             h1 {
-                font-family: serif;
+                font-family: var(--font-heading);
                 font-weight: 400;
                 font-size: 6.25rem;
                 line-height: 100%;
