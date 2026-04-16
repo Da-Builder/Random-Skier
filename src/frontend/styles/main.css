@@ -10,7 +10,9 @@
     border: 0;
     font-size: 100%;
     vertical-align: baseline;
-    outline: 1px solid red !important;  /* Debugging */
+    /* outline: 1px solid red !important;  /* Debugging */
+    
+    scrollbar-width: none;
 }
 
 
