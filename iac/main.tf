@@ -22,17 +22,38 @@ variable "project" {
 }
 
 
+output "endpoint" {
+  value = aws_cloudfront_distribution.cloudfront.domain_name
+}
+
+
+locals {
+  build_directory  = "../build/"
+  source_directory = "../src/"
+}
+
 resource "aws_s3_bucket" "website" {
   bucket        = "${var.project}-website"
   force_destroy = true
+
+  provisioner "local-exec" {
+    command     = "vite --config=vite.ts build"
+    working_dir = "${local.source_directory}/frontend/"
+  }
 }
 
 resource "aws_s3_object" "website" {
   bucket = aws_s3_bucket.website.id
 
-  key          = "index.html"
-  source       = "../src/frontend/index.html"
-  content_type = "text/html"
+  for_each = {
+    "index.html" = "text/html",
+    "index.css"  = "text/css",
+    "index.js"   = "text/javascript"
+  }
+
+  key          = "frontend/${each.key}"
+  source       = "${local.build_directory}/frontend/${each.key}"
+  content_type = each.value
 }
 
 resource "aws_s3_bucket_policy" "website" {
@@ -144,6 +165,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   origin {
     origin_id   = local.default_origin
     domain_name = aws_s3_bucket.website.bucket_regional_domain_name
+    origin_path = "/frontend"
 
     origin_access_control_id = aws_cloudfront_origin_access_control.website.id
   }
