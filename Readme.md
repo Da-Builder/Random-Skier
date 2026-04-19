@@ -18,4 +18,6 @@ This is quite a heavy computation, so it's done server-side on cloud GPUs (compu
 
 ## Architecture stuff
 
-Master alex did some magic. Hopefully he teaches me :)
+This is the big picture
+
+![Overview](./assets/architecture-overview.png)

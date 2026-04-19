@@ -1,9 +1,5 @@
-import { createCamera } from './camera.js';
-import { createControls } from './controls.js';
-import { createScene } from './scene.js';
-import { createRenderer } from './renderer.js';
-import { resizeRendererToDisplaySize } from './resize.js';
 import { setupHero } from './hero.js'
+import { setupSki } from './ski.js'
 
 function main() {
 
@@ -19,7 +15,8 @@ function main() {
 
 
     setupHero() 
-    
+
+    setupSki()
 
 }
 
