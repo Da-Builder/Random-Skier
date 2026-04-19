@@ -1,7 +1,7 @@
-import { createCamera } from './camera.js';
-import { createScene } from './scene.js';
-import { createRenderer } from './renderer.js';
-import { resizeRendererToDisplaySize } from './resize.js';
+import { createScene } from './hero-scene.js';
+import { createCamera } from './utils/camera.js';
+import { createRenderer } from './utils/renderer.js';
+import { resizeRendererToDisplaySize } from './utils/resize.js';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "../styles/main.css"
@@ -12,7 +12,7 @@ export function setupHero() {
 
     const canvas = document.getElementById('hero-canvas');
 
-    const renderer = createRenderer(canvas);
+    const renderer = createRenderer(canvas, true);
     const camera = createCamera();
     const scene = createScene();
 
