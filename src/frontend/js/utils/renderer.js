@@ -1,14 +1,16 @@
 import * as THREE from 'three';
 
-export function createRenderer(canvas) {
+export function createRenderer(canvas, transparentBG = false) {
     
     const renderer = new THREE.WebGLRenderer( { 
         canvas, // Use an existing canvas
         antialias: true, // Smoothen edges
-        alpha: true
+        alpha: transparentBG
     } );
 
-    renderer.setClearAlpha(0);
+    if (transparentBG) {
+        renderer.setClearAlpha(0);
+    }
 
     return renderer
     
