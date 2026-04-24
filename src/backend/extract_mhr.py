@@ -1,3 +1,14 @@
+"""
+Usage:
+
+save_mhr_params(
+    outputs=mask_output, 
+    save_dir=f"{self.OUTPUT_DIR}/hmr_4d_individual", 
+    image_path=image_path,
+    id_current=id_current,
+)
+"""
+
 import json
 import torch
 import numpy as np
