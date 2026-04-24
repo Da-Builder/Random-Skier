@@ -5,15 +5,14 @@ Requirements:
     pip install trimesh pygltflib numpy
 
 Usage:
-    python ply_sequence_to_gltf.py --input "meshes/*.ply" --output skier_animation.glb --fps 60
+    python ply_sequence_to_gltf.py --input "meshes/*.ply" --output "animation/skier.glb" --fps 60
 
 Notes:
-    All PLY files MUST share the same vertex count and face topology.
+    All PLY files MUST have the same vertex and face count.
 """
 
 import argparse
 import glob
-import json
 import numpy as np
 import trimesh
 from pygltflib import *
@@ -182,7 +181,7 @@ def build_gltf(meshes: list[trimesh.Trimesh], fps: float) -> GLTF2:
     w_bv  = add_buffer_view(weights_offset, weights_len)
     w_acc = add_accessor(w_bv, FLOAT, n_frames * n_targets, SCALAR)
 
-    # ── mesh ─────────────────────────────────
+    # mesh 
     targets = [{"POSITION": acc} for acc in morph_accessors]
     prim = Primitive(
         attributes=Attributes(POSITION=pos_acc),
@@ -196,14 +195,14 @@ def build_gltf(meshes: list[trimesh.Trimesh], fps: float) -> GLTF2:
     )
     gltf.meshes.append(mesh)
 
-    # ── node / scene ──────────────────────────
+    # node / scene
     node = Node(mesh=0)
     gltf.nodes.append(node)
     scene = Scene(nodes=[0])
     gltf.scenes.append(scene)
     gltf.scene = 0
 
-    # ── animation ────────────────────────────
+    # animation 
     # One channel animates the "weights" of node 0.
     # The sampler maps time → weight vector (all N_targets weights concatenated).
     sampler = AnimationSampler(
@@ -231,7 +230,7 @@ def main():
     )
     parser.add_argument(
         "--output", "-o",
-        default="skier-animation.glb",
+        default="animation/skier.glb",
         help="Output file path (.glb recommended, .gltf also accepted). Default: animation.glb",
     )
     parser.add_argument(
