@@ -2,7 +2,7 @@ import type { UserConfig } from "vite";
 
 export default {
 	build: {
-		outDir: "../../build/frontend",
+		outDir: "../../build",
 		emptyOutDir: true,
 
 		rolldownOptions: {

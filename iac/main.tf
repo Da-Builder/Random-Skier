@@ -27,10 +27,8 @@ output "endpoint" {
 }
 
 
-locals {
-  build_directory  = "../build/"
-  source_directory = "../src/"
-}
+
+
 
 resource "aws_s3_bucket" "website" {
   bucket        = "${var.project}-website"
@@ -38,7 +36,7 @@ resource "aws_s3_bucket" "website" {
 
   provisioner "local-exec" {
     command     = "vite --config=vite.ts build"
-    working_dir = "${local.source_directory}/frontend/"
+    working_dir = "../src/frontend/"
   }
 }
 
@@ -51,8 +49,8 @@ resource "aws_s3_object" "website" {
     "index.js"   = "text/javascript"
   }
 
-  key          = "frontend/${each.key}"
-  source       = "${local.build_directory}/frontend/${each.key}"
+  key          = each.key
+  source       = "../build/${each.key}"
   content_type = each.value
 }
 
@@ -70,6 +68,9 @@ resource "aws_s3_bucket_policy" "website" {
 }
 
 
+
+
+
 resource "aws_s3_bucket" "data" {
   bucket        = "${var.project}-data"
   force_destroy = true
@@ -84,6 +85,32 @@ resource "aws_s3_bucket_lifecycle_configuration" "data" {
     expiration { days = 1 }
   }
 }
+
+resource "aws_s3_bucket_notification" "data" {
+  bucket = aws_s3_bucket.data.id
+
+  queue {
+    queue_arn     = aws_sqs_queue.queue.arn
+    events        = ["s3:ObjectCreated:Put"]
+    filter_prefix = "video/"
+  }
+}
+
+resource "aws_sqs_queue" "queue" {
+  name = "${var.project}-queue"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = {
+      Effect    = "Allow"
+      Action    = "sqs:SendMessage"
+      Resource  = "arn:aws:sqs:${var.region}:*:${var.project}-queue"
+      Principal = { Service = "s3.amazonaws.com" }
+      Condition = { ArnEquals = { "AWS:SourceArn" = aws_s3_bucket.data.arn } }
+  } })
+}
+
+
+
 
 
 data "archive_file" "lambda" {
@@ -150,6 +177,9 @@ resource "aws_iam_role_policy" "policy" {
 }
 
 
+
+
+
 locals {
   default_origin     = "default"
   lambda_origin      = "lambda"
@@ -165,7 +195,6 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   origin {
     origin_id   = local.default_origin
     domain_name = aws_s3_bucket.website.bucket_regional_domain_name
-    origin_path = "/frontend"
 
     origin_access_control_id = aws_cloudfront_origin_access_control.website.id
   }
