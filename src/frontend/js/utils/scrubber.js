@@ -1,6 +1,5 @@
-import { resizeRendererToDisplaySize } from './resize.js';
 import * as THREE from 'three';
-
+import { resizeRendererToDisplaySize } from './resize.js';
 
 export function createScrubber(mixer, clips, renderer, scene, camera, controls) {
 
@@ -20,17 +19,14 @@ export function createScrubber(mixer, clips, renderer, scene, camera, controls) 
     let frameId = null;
     const timer = new THREE.Timer();
 
-
     const scrubber = document.getElementById('scrubber');
     const playBtn = document.getElementById('play-button');
     const scrubInput = document.getElementById('scrub-input');
     const timeLabel = document.getElementById('time-label');
     timeLabel.textContent = `0.00 / ${duration.toFixed(2)}`;
 
-
-
-
-    // ── Always-on render loop (handles orbit even when paused) ──
+    renderLoop();
+    
     function renderLoop() {
         
 		if ( resizeRendererToDisplaySize( renderer ) ) {
@@ -48,9 +44,6 @@ export function createScrubber(mixer, clips, renderer, scene, camera, controls) 
 
     }
     
-    renderLoop();
-    
-    // ── Separate animation tick, only active while playing ──
     function animateTick() {
         if (!isPlaying) return;
         frameId = requestAnimationFrame(animateTick);
@@ -83,7 +76,7 @@ export function createScrubber(mixer, clips, renderer, scene, camera, controls) 
         timeLabel.textContent = `${t.toFixed(2)} / ${duration.toFixed(2)}`;
     }
 
-    // --- Events ---
+    // Events
     playBtn.addEventListener('click', () => {
         isPlaying ? stop() : start();
     });

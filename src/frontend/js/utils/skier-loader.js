@@ -1,13 +1,13 @@
 import * as THREE from 'three'
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
-export function loadSkier(scene) {
+export function loadSkier(scene, path) {
     
     return new Promise((resolve, reject) => {
         
         const loader = new GLTFLoader();
         loader.load(
-            './assets/skier-with-animation.glb',
+            path,
             (gltf) => {
                 const skier = gltf.scene;
                 
