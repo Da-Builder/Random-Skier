@@ -1,5 +1,5 @@
-import { setupHero } from './hero.js'
-import { setupSki } from './ski.js'
+import { initHero } from './hero.js'
+import { initSkiViewer } from './ski-viewer.js'
 
 function main() {
 
@@ -13,10 +13,9 @@ function main() {
         window.scrollTo(0, 0);
     });
 
+    initHero() 
 
-    setupHero() 
-
-    setupSki()
+    initSkiViewer()
 
 }
 

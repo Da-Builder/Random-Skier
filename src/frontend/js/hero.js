@@ -1,18 +1,17 @@
-import { createCamera } from './utils/camera.js';
-import { createRenderer } from './utils/renderer.js';
-import { resizeRendererToDisplaySize } from './utils/resize.js';
-import { createScene } from './utils/hero-scene.js';
-import { loadSkier } from './utils/skier-loader.js'
+import * as THREE from 'three';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { createCamera } from './utils/camera.js';
+import { createRenderer } from './utils/renderer.js';
+import { createScene } from './utils/scene-hero.js';
+import { loadSkier } from './utils/skier-loader.js'
+import { resizeRendererToDisplaySize } from './utils/resize.js';
+
 import "../styles/main.css";
-
-
-import * as THREE from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export async function setupHero() {
+export async function initHero() {
 
     const canvas = document.getElementById('hero-canvas');
     const renderer = createRenderer(canvas, true);
@@ -21,7 +20,7 @@ export async function setupHero() {
     camera.position.set(0, 0, -10);
     camera.lookAt(0, 0, 0);
 
-    const { mixer, clips } = await loadSkier(scene);
+    const { mixer, clips } = await loadSkier(scene, './assets/skier-with-animation.glb');
 
     const clip = clips[0];
     const duration = clip.duration;
@@ -74,7 +73,6 @@ export async function setupHero() {
             )
  
     }
-
 
     function scrollAnimation() {
 
