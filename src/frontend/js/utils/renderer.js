@@ -12,6 +12,9 @@ export function createRenderer(canvas, transparentBG = false) {
         renderer.setClearAlpha(0);
     }
 
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+
     return renderer
     
 }
