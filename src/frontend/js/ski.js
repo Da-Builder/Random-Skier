@@ -1,35 +1,27 @@
-import { createScene } from './ski-scene.js';
+import { createScene } from './utils/ski-scene.js';
+import { loadSkier } from './utils/skier-loader.js';
 import { createCamera } from './utils/camera.js';
 import { createControls } from './utils/controls.js';
 import { createRenderer } from './utils/renderer.js';
-import { resizeRendererToDisplaySize } from './utils/resize.js';
 
-export function setupSki() {
+import { createScrubber } from './utils/scrubber.js'
+
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+export async function setupSki() {
 
     const canvas = document.getElementById('ski-canvas');
 
     const renderer = createRenderer(canvas, false);
     const scene = createScene();
+    const camera = createCamera();
+    camera.position.set(0, 0, -10);
+    camera.lookAt(0, 0, 0);
 
-    const camera = createCamera({x: 0, y: 0.1, z: 0.1});
     const controls = createControls(camera, canvas);
 
-	function render() {
+    const {mixer, clips} = await loadSkier(scene);
 
-		if ( resizeRendererToDisplaySize( renderer ) ) {
-
-			const canvas = renderer.domElement;
-			camera.aspect = canvas.clientWidth / canvas.clientHeight;
-			camera.updateProjectionMatrix();
-
-		}
-
-		renderer.render( scene, camera );
-
-		requestAnimationFrame( render );
-
-	}
-
-	requestAnimationFrame( render );
+    createScrubber(mixer, clips, renderer, scene, camera, controls);
 
 }

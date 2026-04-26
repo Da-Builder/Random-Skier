@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
 export function createScene() {
 
@@ -31,16 +30,6 @@ export function createScene() {
 
 	// }
 
-    // Load mesh
- //    {
- //        const gltfLoader = new GLTFLoader();
- //        const url = '../assets/skier.gltf';
- //        gltfLoader.load(url, (gltf) => {
- //            const root = gltf.scene;
- //            scene.add(root);
- //        });
-	// }
-
     // Lighting
     {
 
@@ -48,14 +37,15 @@ export function createScene() {
 		const intensity = 3;
 		const light = new THREE.DirectionalLight( color, intensity );
 		light.position.set( 0, 10, 0 );
-		light.target.position.set( - 5, 0, 0 );
+		light.target.position.set( - 10, 0, 10 );
 		scene.add( light );
 		scene.add( light.target );
 
-        const ambient = new THREE.AmbientLight(0xffffff, 0.1);
+        const ambient = new THREE.AmbientLight(0xffffff, 0.2);
         scene.add(ambient);
 	}
 
     return scene;
     
 }
+    

@@ -54,7 +54,14 @@
         
 
         <section id="ski-container">
-            <canvas id="ski-canvas"></canvas>
+            <div style="width: 60%; height: 100%; position: relative; display: flex; justify-content: center; align-items: center;">
+                <canvas id="ski-canvas"></canvas>
+                <div id="scrubber">
+                    <button id="play-button">▶</button>
+                    <input id="scrub-input" type='range' min=0 max=1000 value=0></input>
+                    <span id="time-label"></span>
+                </div>
+            </div>
         </section>
 
         <script type="module" src="js/main.js"></script>

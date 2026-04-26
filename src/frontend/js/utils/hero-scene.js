@@ -4,7 +4,7 @@ export function createScene() {
 
     const scene = new THREE.Scene()
 
-    // Plane
+ //    // Plane
  //    {
 
 	// 	const planeSize = 40;
@@ -28,19 +28,6 @@ export function createScene() {
 	// 	scene.add( mesh );
 
 	// }
-
-    // Cube
-    {
-
-		const cubeSize = 4;
-		const cubeGeo = new THREE.BoxGeometry( cubeSize, cubeSize, cubeSize );
-		const cubeMat = new THREE.MeshPhongMaterial( { color: '#8AC' } );
-		const mesh = new THREE.Mesh( cubeGeo, cubeMat );
-		mesh.position.set( 8, cubeSize / 2, -4 );
-        mesh.name = 'cube';
-		scene.add( mesh );
-
-	}
 
     // Lighting
     {

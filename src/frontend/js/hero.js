@@ -1,23 +1,35 @@
-import { createScene } from './hero-scene.js';
 import { createCamera } from './utils/camera.js';
 import { createRenderer } from './utils/renderer.js';
 import { resizeRendererToDisplaySize } from './utils/resize.js';
+import { createScene } from './utils/hero-scene.js';
+import { loadSkier } from './utils/skier-loader.js'
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import "../styles/main.css"
+import "../styles/main.css";
+
+
+import * as THREE from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function setupHero() {
+export async function setupHero() {
 
     const canvas = document.getElementById('hero-canvas');
-
     const renderer = createRenderer(canvas, true);
-    const camera = createCamera();
     const scene = createScene();
+    const camera = createCamera();
+    camera.position.set(0, 0, -10);
+    camera.lookAt(0, 0, 0);
 
-    const cube = scene.getObjectByName('cube');
-    const position = cube.position;
+    const { mixer, clips } = await loadSkier(scene);
+
+    const clip = clips[0];
+    const duration = clip.duration;
+    const action = mixer.clipAction(clip);
+    action.play();
+
+    const timer = new THREE.Timer();
+    const animationProgress = { time: 0 };
 
     function introAnimation(){
 
@@ -36,10 +48,16 @@ export function setupHero() {
                 {y: '100%', duration: 0.8, ease: "power4.inOut", 
                  delay: 1}
             )
-            .fromTo(
-                position, 
-                {x: 8, y: 2, z: -4}, 
-                {x: -6, y: 2, z: 10, duration: 4, onUpdate: render}, 
+            .to(
+                animationProgress,
+                {
+                    time: duration / 2, 
+                    duration: 4, 
+                    onUpdate: () => {
+                        mixer.setTime(animationProgress.time);
+                        render();
+                    }
+                }, 
                 '-=0.8'
             )
             .fromTo(
@@ -75,7 +93,7 @@ export function setupHero() {
         .fromTo(
             '.header-container', 
             {opacity: 1, y: '0%'}, 
-            {opacity: 0, y: '-100%', ease: "power1.Out", duration: 0.6}, 
+            {opacity: 0, y: '-100%', ease: "power1.out", duration: 0.6}, 
             0 // Timestamp is converted to scrol percentage
         )
         .fromTo(
@@ -84,21 +102,26 @@ export function setupHero() {
             {opacity: 0, xPercent: 100, ease: "power4.inOut", duration: 1}, 
             "<"
         )
-        .fromTo(
-            position, 
-            {x: -6, y: 2, z: 10}, 
-            {x: 6, y: 4, z: 12, ease: "power4.out", onUpdate: render, duration: 1},
+        .to(
+            animationProgress, 
+            {
+                time: duration * 0.9999, 
+                duration: 1,
+                onUpdate: () => {
+                    mixer.setTime(animationProgress.time);
+                    render();
+                } 
+            },
             "-=0.5"
         )
         .fromTo(
             '.instruction-container', 
             {opacity: 0, xPercent: -100}, 
             {opacity: 1, xPercent: 0, ease: "power4.out", duration: 1}, 
-            "-=0.8"
+            "-=0.6"
         )
         
     }
-
     
     function render() {
         
@@ -107,6 +130,7 @@ export function setupHero() {
 			camera.aspect = canvas.clientWidth / canvas.clientHeight;
 			camera.updateProjectionMatrix();
 		}
+
 		renderer.render( scene, camera );
         
     }
