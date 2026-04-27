@@ -9,8 +9,7 @@ sqs = boto3.client("sqs", region_name="ap-southeast-2")
 s3  = boto3.client("s3")
 
 QUEUE_URL        = "https://sqs.ap-southeast-2.amazonaws.com/965848654183/ski-queue"
-S3_INPUT_BUCKET  = "ski-data"
-S3_OUTPUT_BUCKET = "ski-data"
+S3_BUCKET        = "ski-data"
 LOCAL_VIDEO_PATH = "./input_video.mp4"
 
 
@@ -42,7 +41,7 @@ def poll_sqs() -> tuple[str, str] | tuple[None, None]:
 
     message = messages[0] # `messages` is a list guaranteed to only have 1 element because of `MaxNumberOfMessages=1`
     receipt_handle = message["ReceiptHandle"]
-    video_s3_key = json.loads(message["Body"])["video_key"]
+    video_s3_key = json.loads(message["Body"])["Records"][0]["s3"]["object"]["key"] # Complicated ahh
     
     return video_s3_key, receipt_handle
 
@@ -58,11 +57,11 @@ def download_from_s3(s3_key: str) -> str:
         Path to the file that is downloaded locally (specified by LOCAL_VIDEO_PATH).
     """
     
-    s3.download_file(S3_INPUT_BUCKET, s3_key, str(LOCAL_VIDEO_PATH))
+    s3.download_file(S3_BUCKET, s3_key, LOCAL_VIDEO_PATH)
     return LOCAL_VIDEO_PATH
 
 
-def upload_to_s3(local_path: Path, s3_key: str) -> str:
+def upload_to_s3(local_path: str, s3_key: str) -> str:
     """
     Uploads a local file (gltf animation of the skeir) to the S3 output bucket.
 
@@ -74,8 +73,8 @@ def upload_to_s3(local_path: Path, s3_key: str) -> str:
         The S3 URI of the uploaded file
     """
     
-    s3.upload_file(str(local_path), S3_OUTPUT_BUCKET, s3_key)
-    return f"s3://{S3_OUTPUT_BUCKET}/{s3_key}"
+    s3.upload_file(local_path, S3_BUCKET, s3_key)
+    return f"s3://{S3_BUCKET}/{s3_key}"
 
 
 def delete_sqs_message(receipt_handle: str) -> None:
@@ -105,28 +104,28 @@ def main() -> None:
     # Download the video from S3
     video_path = download_from_s3(video_s3_key)
 
-    # Run SAM-4D-Body
+    # Run SAM-Body4D
     run(
         ["python", "scripts/offline_app.py", "--input_video", Path(video_path)], 
         check=True
     )
 
     output_path = Path("./output/")
-    mesh_path = list(output_path.iterdir())[0] / "mesh_4d_individual/1/"
+    ply_path = list(output_path.iterdir())[0] / "mesh_4d_individual/1/"
 
     # Convert a sequence of .ply files to a .glb file using Blender
+    # Important: Blender should save the file somewhere inside output/
     run(
-        ["blender", "--background", "--python", "blender.py", "--", mesh_path],
+        ["blender", "--background", "--python", "blender.py", "--", ply_path],
         check=True
     )
 
     # Get Path
-    blender_output = list(output_path.glob("**/*.glb"))
-    result_file = blender_output[0]
+    glb_path = list(output_path.glob("**/*.glb"))[0]
 
     # Store to S3
-    output_s3_key = f"results/{Path(video_s3_key).stem}.glb"
-    upload_to_s3(result_file, output_s3_key)
+    output_s3_key = f"model/{Path(video_s3_key).stem}.glb"
+    upload_to_s3(str(glb_path), output_s3_key)
 
     # Cleanup Stuff
     rmtree(output_path)
