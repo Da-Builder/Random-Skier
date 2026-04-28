@@ -1,9 +1,5 @@
-import { createCamera } from './camera.js';
-import { createControls } from './controls.js';
-import { createScene } from './scene.js';
-import { createRenderer } from './renderer.js';
-import { resizeRendererToDisplaySize } from './resize.js';
-import { setupHero } from './hero.js'
+import { initHero } from './hero.js'
+import { initSkiViewer } from './ski-viewer.js'
 
 function main() {
 
@@ -17,9 +13,9 @@ function main() {
         window.scrollTo(0, 0);
     });
 
+    initHero() 
 
-    setupHero() 
-    
+    initSkiViewer()
 
 }
 
