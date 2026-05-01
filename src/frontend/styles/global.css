@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    scrollbar-width: none;
+    /* outline: 1px solid red !important; */
+}
+
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: var(--font-text);
+    color: var(--colour);
+    user-select: none;
+}
+
+section {    
+    width: 100%;
+    height: 100lvh;
+    position: relative;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

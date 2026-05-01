@@ -1,29 +1,17 @@
 import * as THREE from 'three';
 import { resizeRendererToDisplaySize } from './resize.js';
 
-export function createScrubber(mixer, clips, renderer, scene, camera, controls) {
+export function createScrubber(mixer, clips, action, renderer, scene, camera, controls) {
 
-    if (!clips || clips.length === 0) {
-        console.warn('No animation clips found in GLB.');
-        return null;
-    }
-
-    // Play the first clip, paused at t=0
-    const clip = clips[0];
-    const action = mixer.clipAction(clip);
-    action.play();
-    mixer.setTime(0);
-
-    const duration = clip.duration;
+    const duration = clips[0].duration;
     let isPlaying = false;
     let frameId = null;
     const timer = new THREE.Timer();
 
-    const scrubber = document.getElementById('scrubber');
     const playBtn = document.getElementById('play-button');
     const scrubInput = document.getElementById('scrub-input');
     const timeLabel = document.getElementById('time-label');
-    timeLabel.textContent = `0.00 / ${duration.toFixed(2)}`;
+    timeLabel.textContent = `0:00 / ${duration.toFixed(2)}`;
 
     renderLoop();
     
@@ -49,9 +37,11 @@ export function createScrubber(mixer, clips, renderer, scene, camera, controls) 
         frameId = requestAnimationFrame(animateTick);
         timer.update()
         const delta = timer.getDelta();
-        mixer.update(delta);
+        mixer.update(delta * playbackSpeed);
         const t = mixer.time % duration;
-        scrubInput.value = (t / duration) * 1000;
+        const val = (t / duration) * 1000;
+        scrubInput.value = val;
+        updateTrackFill(val);
         timeLabel.textContent = `${t.toFixed(2)} / ${duration.toFixed(2)}`;
     }
     
@@ -59,7 +49,6 @@ export function createScrubber(mixer, clips, renderer, scene, camera, controls) 
         if (isPlaying) return;
         isPlaying = true;
         timer.update();
-        playBtn.textContent = '⏸';
         animateTick();
     }
     
@@ -67,24 +56,36 @@ export function createScrubber(mixer, clips, renderer, scene, camera, controls) 
         if (frameId) cancelAnimationFrame(frameId);
         isPlaying = false;
         timer.update();
-        playBtn.textContent = '▶';
+    }
+
+    function updateTrackFill(val) {
+        // val is 0–1000, so clamp it between 0–100
+        scrubInput.style.setProperty('--progress', val / 10);
     }
 
     function setMixerTime(t) {
         mixer.setTime(t);
-        scrubInput.value = (t / duration) * 1000;
+        const val = (t / duration) * 1000;
+        scrubInput.value = val;
+        updateTrackFill(val);
         timeLabel.textContent = `${t.toFixed(2)} / ${duration.toFixed(2)}`;
     }
 
     // Events
     playBtn.addEventListener('click', () => {
         isPlaying ? stop() : start();
+        document.getElementById('play-icon').style.display = isPlaying ? 'none' : 'block';
+        document.getElementById('pause-icon').style.display = isPlaying ? 'block' : 'none';
+
     });
 
     // While dragging: pause and seek
     scrubInput.addEventListener('mousedown', () => {
         if (isPlaying) stop();
+        document.getElementById('play-icon').style.display = isPlaying ? 'none' : 'block';
+        document.getElementById('pause-icon').style.display = isPlaying ? 'block' : 'none';
     });
+    
     scrubInput.addEventListener('touchstart', () => {
         if (isPlaying) stop();
     });
@@ -93,6 +94,34 @@ export function createScrubber(mixer, clips, renderer, scene, camera, controls) 
         const t = (scrubInput.value / 1000) * duration;
         setMixerTime(t);
     });
+
+    // Speed control
+    let playbackSpeed = 1;
+    const speedBtn = document.getElementById('speed-button');
+    const speedLabel = document.getElementById('speed-label');
+    const speedMenu = document.getElementById('speed-menu');
+    const speedOptions = document.querySelectorAll('.speed-option');
+ 
+    speedBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        speedMenu.classList.toggle('open');
+    });
+ 
+    document.addEventListener('click', () => {
+        speedMenu.classList.remove('open');
+    });
+ 
+    speedOptions.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            playbackSpeed = parseFloat(btn.dataset.speed);
+            speedLabel.textContent = btn.textContent;
+            speedOptions.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            speedMenu.classList.remove('open');
+        });
+    });
+    
 
     return { start, stop, setMixerTime };
 }
