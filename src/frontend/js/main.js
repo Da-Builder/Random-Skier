@@ -34,7 +34,6 @@ function main() {
             scrollTrigger: {
                 trigger: '.main-container',
                 start: '75% bottom',
-                markers: true,
             },
         });
     
