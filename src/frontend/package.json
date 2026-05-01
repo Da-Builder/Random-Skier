@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "gsap": "^3.15.0",
+    "javascript-typescript-langserver": "^2.11.3",
     "three": "^0.183.2"
   },
   "devDependencies": {

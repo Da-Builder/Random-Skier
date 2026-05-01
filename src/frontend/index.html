@@ -43,7 +43,8 @@
 			</div>
 		</header>
 
-		<section class="hero-container">
+		<section class="hero-container" style="background: radial-gradient(circle, #BED7E6 30%, #a9caf5 100%);">
+		<!-- <section class="hero-container" style="background: url('./assets/4.png'); background-size: cover;"> -->
 			<canvas id="hero-canvas"></canvas>
 			<div class="intro-container">
 				<div class="intro-content">
@@ -65,29 +66,48 @@
 			</div>
 		</section>
 
-		<section id="ski-container">
-			<div
-				style="
-					width: 60%;
-					height: 100%;
-					position: relative;
-					display: flex;
-					justify-content: center;
-					align-items: center;
-				"
-			>
-				<canvas id="ski-canvas"></canvas>
-				<div id="scrubber">
-					<button id="play-button">▶</button>
-					<input
-						id="scrub-input"
-						type="range"
-						min="0"
-						max="1000"
-						value="0"
-					/>
-					<span id="time-label"></span>
-				</div>
+		<section class="main-container" style="overflow: hidden;">
+                        
+            <div class="video-uploader">
+                <p>Upload video here (less than 5s) <br> The scroll animation is temporary - it's supposed to happen automatically when mesh is ready</p>
+            </div>
+            
+            <div class="processing">
+                <div class="processing-sq"></div>
+                <div class="processing-sq"></div>
+                <div class="processing-sq"></div>
+                <div class="processing-sq"></div>
+            </div>
+            
+			<div id="ski-viewer-container">
+				<canvas id="ski-viewer-canvas"></canvas>
+				<div id="player">
+                    <button id="play-button">
+                        <svg id="play-icon" viewBox="0 0 16 16" fill="#52322B">
+                            <polygon points="3,1 13,8 3,15"/>
+                        </svg>
+                        <svg id="pause-icon" viewBox="0 0 16 16" fill="#52322B" style="display:none;">
+                            <rect x="2" y="1" width="4" height="14" rx="1"/>
+                            <rect x="10" y="1" width="4" height="14" rx="1"/>
+                        </svg>
+                    </button>
+                    <div id="scrubber">
+                        <input id="scrub-input" type='range' min=0 max=1000 value=0></input>
+                        <span id="time-label"></span>
+                    </div>
+                    <div id="speed-control">
+                        <button id="speed-button"><span id="speed-label">1×</span></button>
+                        <div id="speed-menu">
+                            <button class="speed-option" data-speed="0.1">0.1×</button>
+                            <button class="speed-option" data-speed="0.25">0.25×</button>
+                            <button class="speed-option" data-speed="0.5">0.5×</button>
+                            <button class="speed-option" data-speed="0.75">0.75×</button>
+                            <button class="speed-option active" data-speed="1">1×</button>
+                            <button class="speed-option" data-speed="1.5">1.5×</button>
+                            <button class="speed-option" data-speed="2">2×</button>
+                        </div>
+                    </div>
+                </div>
 			</div>
 		</section>
 
