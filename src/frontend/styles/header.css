@@ -1,0 +1,50 @@
+header {
+    width: 100%;
+    position: fixed;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+
+    .header-container {
+        width: 80vw; 
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    
+        .header-brand {
+            font-weight: 250;
+            font-size: 1.5625rem;
+            line-height: 100%;
+        }
+    
+        .header-menu {
+            list-style: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2em;
+    
+            li {
+                padding: 10px 30px;
+                cursor: pointer;
+                transition: all 0.4s ease-in-out;
+    
+                &:hover {
+                    color: var(--hover-colour);
+                    svg {
+                        path {
+                            stroke: var(--hover-colour);
+                            fill: var(--hover-colour);
+                        }
+                    }
+                }
+            }
+    
+            a {
+                font-size: 0.8125rem;
+                text-decoration: none;
+                transition: all 0.4s ease-in-out;
+            }
+        }
+    }
+}

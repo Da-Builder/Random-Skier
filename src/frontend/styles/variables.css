@@ -1,0 +1,9 @@
+:root {
+    --colour: rgb(82, 50, 43);
+    --colour-light: rgba(82, 50, 43, 0.15);
+    --hover-colour: rgb(122, 74, 65);
+    --hover-colour-light: rgba(122, 74, 65, 0.3);
+    --font-heading: serif;
+    --font-text: sans-serif; 
+    --progress: 0;
+}

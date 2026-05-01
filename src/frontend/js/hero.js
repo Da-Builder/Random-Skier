@@ -7,11 +7,11 @@ import { createScene } from './utils/scene-hero.js';
 import { loadSkier } from './utils/skier-loader.js'
 import { resizeRendererToDisplaySize } from './utils/resize.js';
 
-import "../styles/main.css";
+import "/styles/main.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export async function initHero() {
+export async function initHero(onHeroComplete) {
 
     const canvas = document.getElementById('hero-canvas');
     const renderer = createRenderer(canvas, true);
@@ -27,7 +27,6 @@ export async function initHero() {
     const action = mixer.clipAction(clip);
     action.play();
 
-    const timer = new THREE.Timer();
     const animationProgress = { time: 0 };
 
     function introAnimation(){
@@ -43,9 +42,12 @@ export async function initHero() {
         });
         introTL
             .to(
+                '.progress',
+                {scaleX: 1, duration: 1.5, ease: "power4.in"}
+            )
+            .to(
                 '.loader', 
-                {y: '100%', duration: 0.8, ease: "power4.inOut", 
-                 delay: 1}
+                {y: '100%', duration: 0.8, ease: "power4.inOut"}
             )
             .to(
                 animationProgress,
@@ -62,7 +64,7 @@ export async function initHero() {
             .fromTo(
                 '.header-container', 
                 {opacity: 0, y: '-100%'}, 
-                {opacity: 1, y: '0%', ease: "power1.inOut", duration: 0.8}, 
+                {opacity: 1, y: '0%', ease: "power2.inOut", duration: 0.8}, 
                 '-=1'
             )
             .fromTo(
@@ -79,11 +81,15 @@ export async function initHero() {
         const scrollTL = gsap.timeline({
         	scrollTrigger: {
         		trigger: '.hero-container',
-        		pin: true, // pin the trigger element while active
+        		pin: true,
+                pinSpacing: true,
         		start: 'top top',
         		end: '200% top',
         		scrub: 1,
                 onUpdate: render,
+                onLeave: () => {
+                    onHeroComplete();
+                },
         	}
         });
     

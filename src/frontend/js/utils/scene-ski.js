@@ -3,7 +3,8 @@ import * as THREE from 'three';
 export function createScene() {
 
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color('black')
+    scene.background = new THREE.Color('#BED7E6')
+    
 
     // Plane
  //    {
@@ -25,7 +26,8 @@ export function createScene() {
 	// 		side: THREE.DoubleSide,
 	// 	} );
 	// 	const mesh = new THREE.Mesh( planeGeo, planeMat );
-	// 	mesh.rotation.x = Math.PI * - .5;
+ //        mesh.position.y = -5;
+	// 	mesh.rotation.x = (Math.PI / 180) * (-100) ;
 	// 	scene.add( mesh );
 
 	// }
@@ -33,16 +35,15 @@ export function createScene() {
     // Lighting
     {
 
-		const color = 0xFFFFFF;
-		const intensity = 3;
-		const light = new THREE.DirectionalLight( color, intensity );
+		const light = new THREE.DirectionalLight( 0xFFFFFF, 3 );
 		light.position.set( 0, 10, 0 );
 		light.target.position.set( - 10, 0, 10 );
 		scene.add( light );
 		scene.add( light.target );
-
-        const ambient = new THREE.AmbientLight(0xffffff, 0.2);
+        
+        const ambient = new THREE.AmbientLight(0xFFFFFF, 1);
         scene.add(ambient);
+
 	}
 
     return scene;
