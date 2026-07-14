@@ -1,10 +1,11 @@
-import type { UserConfig } from "vite";
+import { defineConfig } from "vite";
 
-export default {
+export default defineConfig({
+	logLevel: "error",
+	publicDir: "assets/",
+
 	build: {
-		outDir: "../../build",
-		emptyOutDir: true,
-
+		outDir: "build/",
 		rolldownOptions: {
 			output: {
 				entryFileNames: "[name].js",
@@ -12,4 +13,4 @@ export default {
 			},
 		},
 	},
-} satisfies UserConfig;
+});
