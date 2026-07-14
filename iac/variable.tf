@@ -24,7 +24,7 @@ variable "Project" {
 }
 
 
-output "Endpoint" { value = "" }
+output "Endpoint" { value = aws_cloudfront_distribution.Main.domain_name }
 
 
 locals {
