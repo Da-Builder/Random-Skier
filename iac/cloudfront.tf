@@ -6,7 +6,7 @@ resource "aws_cloudfront_distribution" "Main" {
 
   origin {
     origin_id                = "Main"
-    origin_path              = "/${local.S3WebsitePath}"
+    origin_path              = "/${terraform_data.Website.input}"
     domain_name              = aws_s3_bucket.Main.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.Website.id
   }
