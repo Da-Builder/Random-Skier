@@ -9,6 +9,8 @@ resource "aws_lambda_function" "Tokener" {
   runtime       = "provided.al2023"
   architectures = ["arm64"]
 
+  source_code_hash = terraform_data.Tokener.triggers_replace
+
   environment { variables = {
     Bucket     = aws_s3_bucket.Data.id
     InPrefix   = local.VarInPrefix
