@@ -27,6 +27,41 @@ data "aws_iam_policy_document" "Main" {
 }
 
 
+
+
+resource "aws_s3_bucket" "Data" {
+  bucket        = lower("${var.Project}-data")
+  force_destroy = true
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "Data" {
+  bucket = aws_s3_bucket.Data.id
+
+  rule {
+    id     = "Auto Delete"
+    status = "Enabled"
+    expiration { days = 1 }
+  }
+}
+
+resource "aws_s3_bucket_notification" "Data" {
+  depends_on = [aws_lambda_permission.Notifier]
+  bucket     = aws_s3_bucket.Data.id
+
+  lambda_function {
+    events              = ["s3:ObjectCreated:Put"]
+    filter_prefix       = local.VarInPrefix
+    lambda_function_arn = aws_lambda_function.Notifier.arn
+  }
+}
+
+resource "aws_sqs_queue" "Data" {
+  name = "${var.Project}-Data"
+}
+
+
+
+
 resource "terraform_data" "Website" {
   input = "Website"
 
@@ -49,21 +84,5 @@ resource "terraform_data" "Lambda" {
       zip --quiet bootstrap.zip bootstrap && rm bootstrap &&
       aws s3 mv --quiet bootstrap.zip s3://${aws_s3_bucket.Main.id}/${self.input}
     SCRIPT
-  }
-}
-
-
-resource "aws_s3_bucket" "Data" {
-  bucket        = lower("${var.Project}-data")
-  force_destroy = true
-}
-
-resource "aws_s3_bucket_lifecycle_configuration" "Data" {
-  bucket = aws_s3_bucket.Data.id
-
-  rule {
-    id     = "Auto Delete"
-    status = "Enabled"
-    expiration { days = 1 }
   }
 }
