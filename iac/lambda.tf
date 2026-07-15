@@ -10,7 +10,7 @@ resource "aws_lambda_function" "Tokener" {
   architectures = ["arm64"]
 
   environment { variables = {
-    Bucket     = "..."
+    Bucket     = aws_s3_bucket.Data.id
     InPrefix   = local.VarInPrefix
     OutPrefix  = local.VarOutPrefix
     Expiration = local.VarSessionDurationHour
@@ -38,6 +38,12 @@ resource "aws_iam_role" "Tokener" {
   max_session_duration = local.VarSessionDurationHour * 3600
 }
 
+resource "aws_iam_role_policy" "Tokener" {
+  name   = local.ResourceTokenerName
+  role   = aws_iam_role.Tokener.id
+  policy = data.aws_iam_policy_document.Tokener.json
+}
+
 data "aws_iam_policy_document" "TokenerRole" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -52,5 +58,17 @@ data "aws_iam_policy_document" "TokenerRole" {
       variable = "AWS:SourceArn"
       values   = ["arn:aws:lambda:${var.Region}:${local.Account}:function:${local.ResourceTokenerName}"]
     }
+  }
+}
+
+data "aws_iam_policy_document" "Tokener" {
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.Data.arn}/${local.VarOutPrefix}*"]
+  }
+
+  statement {
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.Data.arn}/${local.VarInPrefix}*"]
   }
 }
