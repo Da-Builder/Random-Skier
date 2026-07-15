@@ -30,6 +30,7 @@ output "Endpoint" { value = aws_cloudfront_distribution.Main.domain_name }
 locals {
   Account = data.aws_caller_identity.Account.id
   Source  = "${path.root}/../src/"
+  Zone    = data.aws_availability_zones.Zone.names
 
   VarInPrefix            = "Upload/"
   VarOutPrefix           = "Output/"
@@ -38,3 +39,4 @@ locals {
 
 
 data "aws_caller_identity" "Account" {}
+data "aws_availability_zones" "Zone" { state = "available" }
