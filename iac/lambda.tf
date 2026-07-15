@@ -1,7 +1,7 @@
-locals { ResourceTokenerName = "${var.Project}-Tokener" }
+locals { ResourceTokener = "${var.Project}-Tokener" }
 
 resource "aws_lambda_function" "Tokener" {
-  function_name = local.ResourceTokenerName
+  function_name = local.ResourceTokener
   role          = aws_iam_role.Tokener.arn
   s3_bucket     = aws_s3_bucket.Main.id
   s3_key        = terraform_data.Tokener.input
@@ -35,13 +35,13 @@ resource "aws_lambda_permission" "Tokener" {
 }
 
 resource "aws_iam_role" "Tokener" {
-  name                 = local.ResourceTokenerName
+  name                 = local.ResourceTokener
   assume_role_policy   = data.aws_iam_policy_document.TokenerRole.json
   max_session_duration = local.VarSessionDurationHour * 3600
 }
 
 resource "aws_iam_role_policy" "Tokener" {
-  name   = local.ResourceTokenerName
+  name   = local.ResourceTokener
   role   = aws_iam_role.Tokener.id
   policy = data.aws_iam_policy_document.Tokener.json
 }
@@ -58,7 +58,7 @@ data "aws_iam_policy_document" "TokenerRole" {
     condition {
       test     = "ArnLike"
       variable = "AWS:SourceArn"
-      values   = ["arn:aws:lambda:${var.Region}:${local.Account}:function:${local.ResourceTokenerName}"]
+      values   = ["arn:aws:lambda:${var.Region}:${local.Account}:function:${local.ResourceTokener}"]
     }
   }
 }
