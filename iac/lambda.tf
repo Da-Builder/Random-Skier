@@ -4,12 +4,12 @@ resource "aws_lambda_function" "Tokener" {
   function_name = local.ResourceTokener
   role          = aws_iam_role.Tokener.arn
   s3_bucket     = aws_s3_bucket.Main.id
-  s3_key        = terraform_data.Tokener.input
+  s3_key        = terraform_data.Lambda["Tokener"].input
   handler       = "bootstrap"
   runtime       = "provided.al2023"
   architectures = ["arm64"]
 
-  source_code_hash = terraform_data.Tokener.triggers_replace
+  source_code_hash = terraform_data.Lambda["Tokener"].triggers_replace
 
   environment { variables = {
     Bucket     = aws_s3_bucket.Data.id

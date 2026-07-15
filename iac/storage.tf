@@ -36,12 +36,14 @@ resource "terraform_data" "Website" {
   }
 }
 
-resource "terraform_data" "Tokener" {
-  input            = "Tokener.zip"
-  triggers_replace = filesha256("${local.Source}/backend/tokener/main.go")
+resource "terraform_data" "Lambda" {
+  for_each = toset(["Tokener", "Notifier"])
+
+  input            = "${each.key}.zip"
+  triggers_replace = filesha256("${local.Source}/backend/${lower(each.key)}/main.go")
 
   provisioner "local-exec" {
-    working_dir = "${local.Source}/backend/tokener/"
+    working_dir = "${local.Source}/backend/${lower(each.key)}/"
     command     = <<-SCRIPT
       GOOS=linux GOARCH=arm64 go build -tags=lambda.norpc -o=bootstrap main.go &&
       zip --quiet bootstrap.zip bootstrap && rm bootstrap &&
