@@ -82,7 +82,7 @@ func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (even
 		}, nil
 	}
 
-	response, err := json.Marshal(struct{ GetURL, PutURL string }{
+	response, err := json.Marshal(struct{ GetUrl, PutUrl string }{
 		getRequest.URL, putRequest.URL,
 	})
 	if err != nil {
