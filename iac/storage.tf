@@ -49,3 +49,19 @@ resource "terraform_data" "Tokener" {
     SCRIPT
   }
 }
+
+
+resource "aws_s3_bucket" "Data" {
+  bucket        = lower("${var.Project}-data")
+  force_destroy = true
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "Data" {
+  bucket = aws_s3_bucket.Data.id
+
+  rule {
+    id     = "Auto Delete"
+    status = "Enabled"
+    expiration { days = 1 }
+  }
+}
