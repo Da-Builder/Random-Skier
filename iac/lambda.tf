@@ -98,7 +98,7 @@ resource "aws_lambda_function" "Notifier" {
   environment { variables = {
     Queue         = aws_sqs_queue.Data.id
     AutoScaleName = aws_autoscaling_group.Main.id
-    AutoScaleRule = aws_autoscaling_policy.Main["Up"].id
+    AutoScaleRule = aws_autoscaling_policy.Main.id
   } }
 }
 
