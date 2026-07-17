@@ -18,13 +18,11 @@ resource "aws_autoscaling_group" "Main" {
 }
 
 resource "aws_autoscaling_policy" "Main" {
-  for_each = { Up = 1, Down = -1 }
-
-  name                   = "Scale ${each.key}"
+  name                   = "Scale Out"
   autoscaling_group_name = aws_autoscaling_group.Main.id
   policy_type            = "SimpleScaling"
   adjustment_type        = "ChangeInCapacity"
-  scaling_adjustment     = each.value
+  scaling_adjustment     = 1
 }
 
 resource "aws_launch_template" "Main" {
