@@ -14,12 +14,12 @@ variable "Region" {
 variable "Project" {
   type        = string
   nullable    = false
-  description = "The project name used for tags & prefixes"
+  description = "The project name for tags & prefixes"
   default     = "Ski"
 
   validation {
     condition     = var.Project == title(var.Project)
-    error_message = "Invalid Project Name: Must be Titlecase"
+    error_message = "Invalid Project Name: Must be Titlecase."
   }
 }
 
