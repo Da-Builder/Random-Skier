@@ -1,9 +1,9 @@
-import { createCamera } from '../three/camera.js';
-import { createControls } from '../three/controls.js';
-import { createRenderer } from '../three/renderer.js';
+import { createCamera } from '../graphics/camera.js';
+import { createControls } from '../graphics/controls.js';
+import { createRenderer } from '../graphics/renderer.js';
 import { createScene } from './scene.js';
 import { createScrubber } from './scrubber.js'
-import { loadSkier } from '../three/skier-loader.js';
+import { loadSkier } from '../graphics/skier-loader.js';
 
 export async function initSkiViewer() {
 

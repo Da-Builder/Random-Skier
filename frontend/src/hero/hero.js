@@ -1,13 +1,11 @@
 import * as THREE from 'three';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { createCamera } from '../three/camera.js';
-import { createRenderer } from '../three/renderer.js';
+import { createCamera } from '../graphics/camera.js';
+import { createRenderer } from '../graphics/renderer.js';
 import { createScene } from './scene.js';
-import { loadSkier } from '../three/skier-loader.js'
-import { resizeRendererToDisplaySize } from '../three/resize.js';
-
-import "../styles/main.css";
+import { loadSkier } from '../graphics/skier-loader.js'
+import { resizeRendererToDisplaySize } from '../graphics/resize.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
