@@ -1,8 +1,9 @@
 from pathlib import Path
 from shutil import rmtree
-from subprocess import run
 import boto3
 import json
+
+from model import reconstruct
 
 
 sqs = boto3.client("sqs", region_name="ap-southeast-2")
@@ -104,28 +105,13 @@ def main() -> None:
     # Download the video from S3
     video_path = download_from_s3(video_s3_key)
 
-    # Run SAM-Body4D
-    run(
-        ["python", "scripts/offline_app.py", "--input_video", Path(video_path)], 
-        check=True
-    )
-
+    # Run the model
     output_path = Path("./output/")
-    ply_path = list(output_path.iterdir())[0] / "mesh_4d_individual/1/"
-
-    # Convert a sequence of .ply files to a .glb file using Blender
-    # Important: Blender should save the file somewhere inside output/
-    run(
-        ["blender", "--background", "--python", "blender.py", "--", ply_path],
-        check=True
-    )
-
-    # Get Path
-    glb_path = list(output_path.glob("**/*.glb"))[0]
+    result_path = reconstruct(Path(video_path), output_path)
 
     # Store to S3
-    output_s3_key = f"model/{Path(video_s3_key).stem}.glb"
-    upload_to_s3(str(glb_path), output_s3_key)
+    output_s3_key = f"model/{Path(video_s3_key).stem}{result_path.suffix}"
+    upload_to_s3(str(result_path), output_s3_key)
 
     # Cleanup Stuff
     rmtree(output_path)
