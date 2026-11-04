@@ -75,10 +75,10 @@ resource "terraform_data" "Lambda" {
   for_each = toset(["Tokener", "Notifier"])
 
   input            = "${each.key}.zip"
-  triggers_replace = filesha256("${local.Source}/backend/${lower(each.key)}/main.go")
+  triggers_replace = filesha256("${local.Source}/backend/lambda/${lower(each.key)}/main.go")
 
   provisioner "local-exec" {
-    working_dir = "${local.Source}/backend/${lower(each.key)}/"
+    working_dir = "${local.Source}/backend/lambda/${lower(each.key)}/"
     command     = <<-SCRIPT
       GOOS=linux GOARCH=arm64 go build -tags=lambda.norpc -o=bootstrap main.go &&
       zip --quiet bootstrap.zip bootstrap && rm bootstrap &&
