@@ -9,8 +9,3 @@ node_modules/
 # Terraform
 *.tfstate*
 .terraform/
-
-
-# Scratch
-.virtual_documents/
-*.ply
