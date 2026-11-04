@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { createCamera } from './utils/camera.js';
-import { createRenderer } from './utils/renderer.js';
-import { createScene } from './utils/scene-hero.js';
-import { loadSkier } from './utils/skier-loader.js'
-import { resizeRendererToDisplaySize } from './utils/resize.js';
+import { createCamera } from '../three/camera.js';
+import { createRenderer } from '../three/renderer.js';
+import { createScene } from './scene.js';
+import { loadSkier } from '../three/skier-loader.js'
+import { resizeRendererToDisplaySize } from '../three/resize.js';
 
-import "/styles/main.css";
+import "../styles/main.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,7 +20,7 @@ export async function initHero(onHeroComplete) {
     camera.position.set(0, 0, -10);
     camera.lookAt(0, 0, 0);
 
-    const { mixer, clips } = await loadSkier(scene, './assets/skier-with-animation.glb');
+    const { mixer, clips } = await loadSkier(scene, '/skier-with-animation.glb');
 
     const clip = clips[0];
     const duration = clip.duration;

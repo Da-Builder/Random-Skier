@@ -1,7 +1,7 @@
 {
     "exclude": [
         "node_modules",
-        "assets",
-        "**/assets"
+        "public",
+        "**/public"
     ]
 }

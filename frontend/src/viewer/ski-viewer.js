@@ -1,9 +1,9 @@
-import { createCamera } from './utils/camera.js';
-import { createControls } from './utils/controls.js';
-import { createRenderer } from './utils/renderer.js';
-import { createScene } from './utils/scene-ski.js';
-import { createScrubber } from './utils/scrubber.js'
-import { loadSkier } from './utils/skier-loader.js';
+import { createCamera } from '../three/camera.js';
+import { createControls } from '../three/controls.js';
+import { createRenderer } from '../three/renderer.js';
+import { createScene } from './scene.js';
+import { createScrubber } from './scrubber.js'
+import { loadSkier } from '../three/skier-loader.js';
 
 export async function initSkiViewer() {
 
@@ -16,7 +16,7 @@ export async function initSkiViewer() {
     camera.position.set(0, 1, -10);
     camera.lookAt(0, 0, 0);
 
-    const {mixer, clips} = await loadSkier(scene, './assets/skier-with-animation.glb');
+    const {mixer, clips} = await loadSkier(scene, '/skier-with-animation.glb');
 
     const action = mixer.clipAction(clips[0]);
 

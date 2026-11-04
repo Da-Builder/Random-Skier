@@ -1,9 +1,9 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { initHero } from "./hero.js";
-import { initSkiViewer } from "./ski-viewer.js";
+import { initHero } from "./hero/hero.js";
+import { initSkiViewer } from "./viewer/ski-viewer.js";
 
-import "/styles/main.css";
+import "./styles/main.css";
 
 gsap.registerPlugin(ScrollTrigger);
 

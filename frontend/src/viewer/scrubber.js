@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { resizeRendererToDisplaySize } from './resize.js';
+import { resizeRendererToDisplaySize } from '../three/resize.js';
 
 export function createScrubber(mixer, clips, action, renderer, scene, camera, controls) {
 

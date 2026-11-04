@@ -67,7 +67,7 @@ resource "terraform_data" "Website" {
 
   provisioner "local-exec" {
     working_dir = "${local.Source}/frontend/"
-    command     = "vite --config=vite.ts build && aws s3 sync --quiet build/ s3://${aws_s3_bucket.Main.id}/${self.input}/ && rm -r build/"
+    command     = "vite build && aws s3 sync --quiet build/ s3://${aws_s3_bucket.Main.id}/${self.input}/ && rm -r build/"
   }
 }
 

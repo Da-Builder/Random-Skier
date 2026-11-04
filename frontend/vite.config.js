@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
 	logLevel: "error",
-	publicDir: "assets/",
 
 	build: {
 		outDir: "build/",
