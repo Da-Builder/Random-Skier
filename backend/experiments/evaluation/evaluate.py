@@ -6,7 +6,7 @@ import mlflow
 import pandas as pd
 
 from .config import Config
-from .metrics import video_info
+from .metrics import measure_latency, video_info
 
 
 class Model(Protocol):
@@ -28,13 +28,26 @@ def _init_experiment(config: Config) -> None:
 def evaluate(model: Model, config: Config) -> pd.DataFrame:
     """Run the model on every clip and log each clip as an MLflow run."""
     _init_experiment(config)
-    model.load()
+
+    with measure_latency() as load:
+        model.load()
+
+    clips = sorted(config.clips_dir.glob("*.mp4"))
+    # Warm up on the first clip so CUDA init doesn't skew its timing
+    with TemporaryDirectory() as warmup_dir:
+        model.reconstruct(clips[0], Path(warmup_dir))
 
     rows = []
-    for clip in sorted(config.clips_dir.glob("*.mp4")):
+    for clip in clips:
         info = video_info(clip)
         with mlflow.start_run(run_name=clip.stem), TemporaryDirectory() as out_dir:
             mlflow.log_params({"clip": clip.name, **info})
-            model.reconstruct(clip, Path(out_dir))
-        rows.append({"clip": clip.name})
+            with measure_latency() as latency:
+                model.reconstruct(clip, Path(out_dir))
+            metrics = {
+                "load_s": load["latency_s"],
+                "run_s": latency["latency_s"],
+            }
+            mlflow.log_metrics(metrics)
+        rows.append({"clip": clip.name, **metrics})
     return pd.DataFrame(rows)

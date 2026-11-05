@@ -1,4 +1,7 @@
+import time
+from contextlib import contextmanager
 from pathlib import Path
+from typing import Iterator
 
 import cv2
 
@@ -15,3 +18,12 @@ def video_info(path: Path) -> dict:
     info["video_s"] = info["frames"] / info["fps"]
     cap.release()
     return info
+
+
+@contextmanager
+def measure_latency() -> Iterator[dict]:
+    """Measure the wall-clock time of the wrapped block."""
+    result = {}
+    start = time.perf_counter()
+    yield result
+    result["latency_s"] = time.perf_counter() - start
