@@ -33,7 +33,7 @@ def _run_clip(model: Model, config: Config, clip: Path, load_s: float) -> dict:
         try:
             info = video_info(clip)
             mlflow.log_params({"clip": clip.name, "gpu": gpu, "torch": torch.__version__, "cuda": torch.version.cuda, "repo": config.repo, **info})
-            with measure_latency() as latency, measure_usage() as usage:
+            with measure_usage() as usage, measure_latency() as latency:
                 output = model.reconstruct(clip, Path(out_dir))
             # Keep the output so reconstruction quality can be evaluated later
             mlflow.log_artifact(str(output))
