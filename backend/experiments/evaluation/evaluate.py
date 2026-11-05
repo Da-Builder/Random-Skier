@@ -45,12 +45,14 @@ def evaluate(model: Model, config: Config) -> pd.DataFrame:
         with mlflow.start_run(run_name=clip.stem), TemporaryDirectory() as out_dir:
             mlflow.log_params({"clip": clip.name, "gpu": gpu, "torch": torch.__version__, "cuda": torch.version.cuda, "repo": config.repo, **info})
             with measure_latency() as latency, measure_usage() as usage:
-                model.reconstruct(clip, Path(out_dir))
+                output = model.reconstruct(clip, Path(out_dir))
             metrics = {
                 "load_s": load["latency_s"],
                 "run_s": latency["latency_s"],
                 **usage,
             }
             mlflow.log_metrics(metrics)
+            # Keep the output so reconstruction quality can be evaluated later
+            mlflow.log_artifact(str(output))
         rows.append({"clip": clip.name, **metrics})
     return pd.DataFrame(rows)
