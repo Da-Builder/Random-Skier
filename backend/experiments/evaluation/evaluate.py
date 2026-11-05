@@ -6,7 +6,7 @@ import mlflow
 import pandas as pd
 
 from .config import Config
-from .metrics import measure_latency, video_info
+from .metrics import measure_latency, measure_usage, video_info
 
 
 class Model(Protocol):
@@ -42,11 +42,12 @@ def evaluate(model: Model, config: Config) -> pd.DataFrame:
         info = video_info(clip)
         with mlflow.start_run(run_name=clip.stem), TemporaryDirectory() as out_dir:
             mlflow.log_params({"clip": clip.name, **info})
-            with measure_latency() as latency:
+            with measure_latency() as latency, measure_usage() as usage:
                 model.reconstruct(clip, Path(out_dir))
             metrics = {
                 "load_s": load["latency_s"],
                 "run_s": latency["latency_s"],
+                **usage,
             }
             mlflow.log_metrics(metrics)
         rows.append({"clip": clip.name, **metrics})
