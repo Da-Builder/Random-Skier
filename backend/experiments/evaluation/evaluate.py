@@ -4,6 +4,7 @@ from typing import Protocol
 
 import mlflow
 import pandas as pd
+import torch
 
 from .config import Config
 from .metrics import measure_latency, measure_usage, video_info
@@ -40,8 +41,9 @@ def evaluate(model: Model, config: Config) -> pd.DataFrame:
     rows = []
     for clip in clips:
         info = video_info(clip)
+        gpu = torch.cuda.get_device_name(torch.cuda.current_device()) if torch.cuda.is_available() else "cpu"
         with mlflow.start_run(run_name=clip.stem), TemporaryDirectory() as out_dir:
-            mlflow.log_params({"clip": clip.name, **info})
+            mlflow.log_params({"clip": clip.name, "gpu": gpu, "torch": torch.__version__, "cuda": torch.version.cuda, "repo": config.repo, **info})
             with measure_latency() as latency, measure_usage() as usage:
                 model.reconstruct(clip, Path(out_dir))
             metrics = {
