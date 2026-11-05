@@ -3,7 +3,7 @@ from shutil import rmtree
 import boto3
 import json
 
-from model import reconstruct
+from model import Model
 
 
 sqs = boto3.client("sqs", region_name="ap-southeast-2")
@@ -107,7 +107,9 @@ def main() -> None:
 
     # Run the model
     output_path = Path("./output/")
-    result_path = reconstruct(Path(video_path), output_path)
+    model = Model()
+    model.load()
+    result_path = model.reconstruct(Path(video_path), output_path)
 
     # Store to S3
     output_s3_key = f"model/{Path(video_s3_key).stem}{result_path.suffix}"
