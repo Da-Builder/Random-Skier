@@ -1,3 +1,4 @@
+import warnings
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Protocol
@@ -26,33 +27,53 @@ def _init_experiment(config: Config) -> None:
     mlflow.set_system_metrics_sampling_interval(1)
 
 
+def _run_clip(model: Model, config: Config, clip: Path, load_s: float) -> dict:
+    gpu = torch.cuda.get_device_name(torch.cuda.current_device()) if torch.cuda.is_available() else "cpu"
+    with mlflow.start_run(run_name=clip.stem), TemporaryDirectory() as out_dir:
+        try:
+            info = video_info(clip)
+            mlflow.log_params({"clip": clip.name, "gpu": gpu, "torch": torch.__version__, "cuda": torch.version.cuda, "repo": config.repo, **info})
+            with measure_latency() as latency, measure_usage() as usage:
+                output = model.reconstruct(clip, Path(out_dir))
+            # Keep the output so reconstruction quality can be evaluated later
+            mlflow.log_artifact(str(output))
+        except Exception as e:
+            # Tag the error so failed runs are filterable in the MLflow UI
+            mlflow.set_tag("error", repr(e))
+            raise
+
+        metrics = {
+            "load_s": load_s,
+            "run_s": latency["latency_s"],
+            **usage,
+        }
+        mlflow.log_metrics(metrics)
+        return {"clip": clip.name, **metrics}
+
+
 def evaluate(model: Model, config: Config) -> pd.DataFrame:
-    """Run the model on every clip and log each clip as an MLflow run."""
+    """Run the model on every clip and log its metrics to MLflow."""
+    clips = sorted(config.clips_dir.glob("*.mp4"))
+    if not clips:
+        raise FileNotFoundError(f"No .mp4 clips in {config.clips_dir}")
+
     _init_experiment(config)
 
     with measure_latency() as load:
         model.load()
 
-    clips = sorted(config.clips_dir.glob("*.mp4"))
     # Warm up on the first clip so CUDA init doesn't skew its timing
-    with TemporaryDirectory() as warmup_dir:
-        model.reconstruct(clips[0], Path(warmup_dir))
+    try:
+        with TemporaryDirectory() as warmup_dir:
+            model.reconstruct(clips[0], Path(warmup_dir))
+    except Exception as e:
+        # Continue so each clip records its own error
+        warnings.warn(f"Warm-up failed: {e!r}")
 
     rows = []
     for clip in clips:
-        info = video_info(clip)
-        gpu = torch.cuda.get_device_name(torch.cuda.current_device()) if torch.cuda.is_available() else "cpu"
-        with mlflow.start_run(run_name=clip.stem), TemporaryDirectory() as out_dir:
-            mlflow.log_params({"clip": clip.name, "gpu": gpu, "torch": torch.__version__, "cuda": torch.version.cuda, "repo": config.repo, **info})
-            with measure_latency() as latency, measure_usage() as usage:
-                output = model.reconstruct(clip, Path(out_dir))
-            metrics = {
-                "load_s": load["latency_s"],
-                "run_s": latency["latency_s"],
-                **usage,
-            }
-            mlflow.log_metrics(metrics)
-            # Keep the output so reconstruction quality can be evaluated later
-            mlflow.log_artifact(str(output))
-        rows.append({"clip": clip.name, **metrics})
+        try:
+            rows.append(_run_clip(model, config, clip, load["latency_s"]))
+        except Exception as e:
+            rows.append({"clip": clip.name, "error": repr(e)})
     return pd.DataFrame(rows)

@@ -18,8 +18,10 @@ def video_info(path: Path) -> dict:
         "width": int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
         "height": int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
     }
-    info["video_s"] = info["frames"] / info["fps"]
     cap.release()
+    if not info["fps"]:
+        raise ValueError(f"Cannot read video: {path}")
+    info["video_s"] = info["frames"] / info["fps"]
     return info
 
 
