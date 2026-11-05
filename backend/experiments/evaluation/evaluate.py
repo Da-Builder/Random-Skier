@@ -6,6 +6,7 @@ import mlflow
 import pandas as pd
 
 from .config import Config
+from .metrics import video_info
 
 
 class Model(Protocol):
@@ -31,7 +32,9 @@ def evaluate(model: Model, config: Config) -> pd.DataFrame:
 
     rows = []
     for clip in sorted(config.clips_dir.glob("*.mp4")):
+        info = video_info(clip)
         with mlflow.start_run(run_name=clip.stem), TemporaryDirectory() as out_dir:
+            mlflow.log_params({"clip": clip.name, **info})
             model.reconstruct(clip, Path(out_dir))
         rows.append({"clip": clip.name})
     return pd.DataFrame(rows)
